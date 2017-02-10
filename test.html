@@ -1,0 +1,54 @@
+<html><head></head><body>
+ 
+<script type='text/javascript'>
+ 
+var _yourBlogUrl = "http://informadordehoy.blogspot.com";
+
+function randomPost() {
+var script = document.createElement("script");
+script.setAttribute("type", "text/javascript");
+var theUrl = _yourBlogUrl +"/feeds/posts/summary?alt=json-in-script&callback=getTotalPostsCallback&start-index=1&max-results=1";
+script.setAttribute("src", theUrl);
+document.documentElement.firstChild.appendChild(script);
+};
+function getTotalPostsCallback(json) {
+var totalResults = json.feed.openSearch$totalResults.$t;
+if (totalResults > 0) {
+getRandomPostNumber(totalResults);
+}
+};
+function getRandomPostNumber(totalResults) {
+var randomNumber = Math.floor((Math.random() * totalResults) + 1);
+getRandomUrl(randomNumber);
+};
+function getRandomUrl(randomNumber) {
+var script = document.createElement("script");
+script.setAttribute("type", "text/javascript");
+var theUrl = _yourBlogUrl +"/feeds/posts/summary?alt=json-in-script&callback=getTheUrlCallback&start-index=" + randomNumber + "&max-results=1";
+script.setAttribute("src", theUrl);
+document.documentElement.firstChild.appendChild(script);
+};
+function getTheUrlCallback(json) {
+var theUrl;
+for(var i = 0; i < json.feed.entry[0].link.length; i++) {
+if (json.feed.entry[0].link[i].rel == "alternate") {
+theUrl = json.feed.entry[0].link[i].href;
+break;
+}
+}
+if(theUrl) {
+window.location.href = theUrl;
+
+return  theUrl;
+}
+}
+ 
+randomPost(); 
+</script>
+
+
+
+
+
+
+</body></html>
